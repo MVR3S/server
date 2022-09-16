@@ -12,6 +12,8 @@ os.environ['PYTHONDEVMODE'] = '1'
 
 q = Queue()
 
+global IsPlaying
+IsPlaying = False
 HOST = "192.168.1.196"
 PORT = 8484
 CHUNK = 1024
@@ -43,6 +45,8 @@ audio = ["C:\\PyProjects\\server\\audio\\1_ADDUARSI.wav",
         "C:\\PyProjects\\server\\audio\\25_STELLE.wav"]
 
 class Server():
+    #global IsPlaying
+    #IsPlaying = False
 
 
     def ServerInfo():
@@ -114,85 +118,109 @@ class Server():
                 print("Received message from client: " + message)
                 if message == 'a':
                     i="0"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'b':
                     i="1"
+
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'c':
                     i="2"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'd':
                     i="3"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'e':
                     i="4"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'f':
                     i="5"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'g':
                     i="6"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'h':
                     i="7"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'i':
                     i="8"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'j':
                     i="9"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'k':
                     i="10"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'l':
                     i="11"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'm':
                     i="12"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'n':
                     i="13"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'o':
                     i="14"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'p':
                     i="15"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'q':
                     i="16"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'r':
                     i="17"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 's':
                     i="18"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 't':
                     i="19"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'u':
                     i="20"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'v':
                     i="21"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'w':
                     i="22"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'x':
                     i="23"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'y':
                     i="24"
+                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'z':
                     i="25"
+                
                     try:
-                        ##asyncio.get_event_loop().run_in_executor(None, Server.play, i)
-
-                        ThreadPoolExecutor.shutdown(wait=False)
+                        asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                     except Exception:
                         print("Errore ThreadPoolExecutor: ", Exception)
                 
@@ -200,10 +228,10 @@ class Server():
 if __name__ == "__main__":
     Server.ServerInfo()
 
-    ##logging.basicConfig(
-        ##format="%(message)s",
-        ##level=logging.DEBUG,
-        ##)
+    #logging.basicConfig(
+        #format="%(message)s",
+        #level=logging.DEBUG,
+        #)
 
     start_server = websockets.serve(Server.socket, HOST, PORT)
     asyncio.get_event_loop().set_default_executor(ThreadPoolExecutor())
