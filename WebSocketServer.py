@@ -1,4 +1,5 @@
 from concurrent.futures import Executor, ThreadPoolExecutor
+from pickle import PicklingError
 import websockets
 import asyncio
 import pyaudio
@@ -7,52 +8,49 @@ import os
 from queue import Queue
 import logging
 
+logging.basicConfig(level=logging.DEBUG)
+
 os.environ['PYTHONASYNCIODEBUG'] = '1'
 os.environ['PYTHONDEVMODE'] = '1'
 
 q = Queue()
 
-global IsPlaying
-IsPlaying = False
-HOST = "192.168.1.196"
+HOST = "192.168.205.148"
 PORT = 8484
 CHUNK = 1024
 
-audio = ["C:\\PyProjects\\server\\audio\\1_ADDUARSI.wav",
-        "C:\\PyProjects\\server\\audio\\2_INSEMPRARSI.wav",
-        "C:\\PyProjects\\server\\audio\\3_INMIARSI_INTUARSI.wav",
-        "C:\\PyProjects\\server\\audio\\4_SITIRE.wav",
-        "C:\\PyProjects\\server\\audio\\5_INDRACARSI.wav",
-        "C:\\PyProjects\\server\\audio\\6_ADDENTARE.wav",
-        "C:\\PyProjects\\server\\audio\\7_MUSO.wav",
-        "C:\\PyProjects\\server\\audio\\8_CIGOLARE.wav",
-        "C:\\PyProjects\\server\\audio\\9_MENSOLA.wav",
-        "C:\\PyProjects\\server\\audio\\10_FERTILE.wav",
-        "C:\\PyProjects\\server\\audio\\11_MUFFA.wav",
-        "C:\\PyProjects\\server\\audio\\12_ALTO.wav",
-        "C:\\PyProjects\\server\\audio\\13_BELLO.wav",
-        "C:\\PyProjects\\server\\audio\\14_BOCCA.wav",
-        "C:\\PyProjects\\server\\audio\\15_CASA.wav",
-        "C:\\PyProjects\\server\\audio\\16_RINGHIARE.wav",
-        "C:\\PyProjects\\server\\audio\\17_SBADIGLIARE.wav",
-        "C:\\PyProjects\\server\\audio\\18_SPUTARE.wav",
-        "C:\\PyProjects\\server\\audio\\19_TESCHIO.wav",
-        "C:\\PyProjects\\server\\audio\\20_UNO.wav",
-        "C:\\PyProjects\\server\\audio\\21_MILLE.wav",
-        "C:\\PyProjects\\server\\audio\\22_INMILLARSI.wav",
-        "C:\\PyProjects\\server\\audio\\23_PUNTO.wav",
-        "C:\\PyProjects\\server\\audio\\24_CERCHIO.wav",
-        "C:\\PyProjects\\server\\audio\\25_STELLE.wav"]
+audio = ["C:\\Users\\Dante\\Desktop\\Server\\audio\\1_ADDUARSI.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\2_INSEMPRARSI.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\3_INMIARSI_INTUARSI.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\4_SITIRE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\5_INDRACARSI.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\6_ADDENTARE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\7_MUSO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\8_CIGOLARE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\9_MENSOLA.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\10_FERTILE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\11_MUFFA.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\12_ALTO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\13_BELLO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\14_BOCCA.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\15_CASA.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\16_RINGHIARE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\17_SBADIGLIARE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\18_SPUTARE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\19_TESCHIO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\20_UNO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\21_MILLE.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\22_INMILLARSI.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\23_PUNTO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\24_CERCHIO.wav",
+        "C:\\Users\\Dante\\Desktop\\Server\\audio\\25_STELLE.wav"]
 
 class Server():
     #global IsPlaying
     #IsPlaying = False
 
-
     def ServerInfo():
         print("Server listening on Port " + str(PORT) + " ip: " + HOST)
-
-
 
 
     def play(i):
@@ -64,8 +62,6 @@ class Server():
             global p
             global stream
             global data
-
-
 
             if(int(i) <= 24):
                 wf = wave.open(audio[int(i)], 'rb')
@@ -100,7 +96,7 @@ class Server():
                 # stop stream
                 stream.stop_stream()
                 stream.close()
-
+                
                 # close PyAudio
                 p.terminate()
             
@@ -118,107 +114,81 @@ class Server():
                 print("Received message from client: " + message)
                 if message == 'a':
                     i="0"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'b':
                     i="1"
-
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'c':
                     i="2"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'd':
                     i="3"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'e':
                     i="4"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'f':
                     i="5"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'g':
                     i="6"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'h':
                     i="7"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'i':
                     i="8"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'j':
                     i="9"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'k':
                     i="10"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'l':
                     i="11"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'm':
                     i="12"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'n':
                     i="13"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'o':
                     i="14"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'p':
                     i="15"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'q':
                     i="16"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'r':
                     i="17"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 's':
                     i="18"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 't':
                     i="19"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'u':
                     i="20"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'v':
                     i="21"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'w':
                     i="22"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'x':
                     i="23"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'y':
                     i="24"
-                    
                     asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                 elif message == 'z':
                     i="25"
-                
                     try:
                         asyncio.get_event_loop().run_in_executor(None, Server.play, i)
                     except Exception:
