@@ -17,11 +17,12 @@ os.environ['PYTHONDEVMODE'] = '1'
 q = Queue()
 playing = -1
 
-HOST = "192.168.90.250"
+#HOST = "192.168.90.250"
+HOST = "localhost"
 PORT = 8484
 CHUNK = 1024
 MIN_MSG = 0
-MAX_MSG = 25
+MAX_MSG = 27
 INIT_MSG = MIN_MSG-1
 AUDIO_DIR = "C:\\Users\\Dante\\Desktop\\WebSocket\\server\\audio\\"
 audio = [AUDIO_DIR + "1_ADDUARSI.wav",
@@ -48,7 +49,9 @@ audio = [AUDIO_DIR + "1_ADDUARSI.wav",
         AUDIO_DIR + "22_INMILLARSI.wav",
         AUDIO_DIR + "23_PUNTO.wav",
         AUDIO_DIR + "24_CERCHIO.wav",
-        AUDIO_DIR + "25_STELLE.wav"]
+        AUDIO_DIR + "25_STELLE.wav",
+        AUDIO_DIR + "26_BIOGRAFIA.wav",
+        AUDIO_DIR + "27_VERSI.wav"]
 
 class Server():
 
@@ -77,7 +80,7 @@ class Server():
             # open stream
             stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                             channels=wf.getnchannels(),
-                            rate=wf.getframerate(),
+                            rate=wf.getframerate(),   
                             output=True)
 
             # read data
