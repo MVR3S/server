@@ -8,6 +8,11 @@ import wave
 import os
 from queue import Queue
 import logging
+import serial
+
+#################################################################
+arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+#################################################################
 
 logging.basicConfig(level=logging.DEBUG)
 
@@ -18,7 +23,7 @@ q = Queue()
 playing = -1
 
 #HOST = "192.168.90.250"
-HOST = "localhost"
+HOST = "192.168.1.196"
 PORT = 8484
 CHUNK = 1024
 MIN_MSG = 0
@@ -71,6 +76,10 @@ class Server():
             global wf
             global data
 
+            ##################################
+            arduino.write(bytes("1", 'utf-8'))
+            ##################################
+
             if(int(i) <= 24):
                 wf = wave.open(audio[int(i)], 'rb')
 
@@ -93,6 +102,11 @@ class Server():
 
             # stop stream
             if stream.is_active():
+
+                ##################################
+                arduino.write(bytes("0", 'utf-8'))
+                ##################################
+
                 stream.stop_stream()
                 stream.close()
                 # close PyAudio
@@ -105,6 +119,11 @@ class Server():
             print("Already playing " + str(playing))
             try:
                 print("Stop playing " + str(playing))
+
+                ##################################
+                arduino.write(bytes("0", 'utf-8'))
+                ##################################
+
                 # stop stream
                 stream.stop_stream()
                 stream.close()
