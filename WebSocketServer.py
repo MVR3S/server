@@ -17,8 +17,8 @@ os.environ['PYTHONDEVMODE'] = '1'
 q = Queue()
 playing = -1
 
-#HOST = "192.168.90.250"
-HOST = "localhost"
+HOST = "192.168.90.250"
+#HOST = "localhost"
 PORT = 8484
 CHUNK = 1024
 MIN_MSG = 0
