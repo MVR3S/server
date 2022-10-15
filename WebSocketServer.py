@@ -4,7 +4,6 @@ import asyncio
 import pyaudio
 import wave
 import os
-from queue import Queue
 import logging
 
 try:
@@ -30,7 +29,6 @@ logging.basicConfig(level=logging.DEBUG)
 os.environ['PYTHONASYNCIODEBUG'] = '1'
 os.environ['PYTHONDEVMODE'] = '1'
 
-q = Queue()
 playing = -1
 
 HOST = "192.168.90.250"
@@ -191,7 +189,6 @@ class Server():
                 # close PyAudio
                 p.terminate()
                
-            #q.get()
             playing=INIT_MSG
 
         elif playing!=i:  # already playing this audio, ignore it!
