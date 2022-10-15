@@ -13,8 +13,14 @@ except:
     print("errore importazione serial")
 
 #################################################################
+print("***************************")
+print("CREAZIONE OGGETTO PORTA SERIALE -- RIGA 17")
+print("***************************")
 try:
-    arduino = serial.Serial(port='COM3', baudrate=9600, timeout=.1)
+    arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
+    print("***************************")
+    print("OGGETTO PORTA SERIALE CREATO -- RIGA 22")
+    print("***************************")
 except:
     print("\n errore apertura porta seriale")
 #################################################################
@@ -28,13 +34,11 @@ q = Queue()
 playing = -1
 
 HOST = "192.168.90.250"
-#HOST = "localhost"
-#HOST = "192.168.90.250"
 
 PORT = 8484
 CHUNK = 1024
 MIN_MSG = 0
-MAX_MSG = 60
+MAX_MSG = 1000
 INIT_MSG = MIN_MSG-1
 AUDIO_DIR = "C:\\Users\\Dante\\Desktop\\WebSocket\\server\\audio\\"
 audio = [AUDIO_DIR + "1_ADDUARSI.wav",
@@ -64,7 +68,7 @@ audio = [AUDIO_DIR + "1_ADDUARSI.wav",
         AUDIO_DIR + "25_STELLE.wav",
         AUDIO_DIR + "26_BIOGRAFIA.wav",
         AUDIO_DIR + "27_VERSI.wav",
-        AUDIO_DIR + "28_PARLAMI_DI_TE",
+        AUDIO_DIR + "28_PARLAMI_DI_TE.wav",
         AUDIO_DIR + "29_QUANDO_SEI_NATO.wav",
         AUDIO_DIR + "30_RACCONTAMI_DELLA_TUA_FAMIGLIA.wav",
         AUDIO_DIR + "31_COSA_FACEVANO_I_TUOI.wav",
@@ -103,7 +107,6 @@ class Server():
     def ServerInfo():
         print("Server listening on Port " + str(PORT) + " ip: " + HOST)
 
-
     def play(i):
         global playing        
         global stream
@@ -117,42 +120,72 @@ class Server():
             global data
 
             ##################################
+            print("***************************")
+            print("AVVIO SCRITTURA SU SERIALE 1 -- RIGA 125")
+            print("***************************")
             try:
                 arduino.write(bytes("1", 'utf-8'))
+                print("***************************")
+                print("SCRITTURA SU SERIALE ESEGUITA 1 -- RIGA 130")
+                print("***************************")
             except:
                 print("\n errore trasmissione")
             ##################################
 
-            if(int(i) <= 24):
+            if(int(i) <= 60):
+                print("***************************")
+                print("APERTURA FILE AUDIO -- RIGA 138")
+                print("***************************")
                 wf = wave.open(audio[int(i)], 'rb')
 
             # instantiate PyAudio
             p = pyaudio.PyAudio()
 
             # open stream
+            print("***************************")
+            print("APERTURA STREAM AUDIO -- RIGA 147")
+            print("***************************")
             stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
                             channels=wf.getnchannels(),
                             rate=wf.getframerate(),   
                             output=True)
 
             # read data
+            print("***************************")
+            print("LETTURA DATI AUDIO -- RIGA 156")
+            print("***************************")
             data = wf.readframes(CHUNK)
 
             # play stream
+            print("***************************")
+            print("RIPRODUZIONE FILE AUDIO -- RIGA 162")
+            print("***************************")
             while (len(data) > 0) and (stream.is_active()):
                 stream.write(data)
                 data = wf.readframes(CHUNK)
+            print("***************************")
+            print("FINE RIPRODUZIONE FILE AUDIO -- RIGA 168")
+            print("***************************")
 
             # stop stream
             if stream.is_active():
 
                 ##################################
+                print("***************************")
+                print("AVVIO SCRITTURA SU SERIALE 0 -- RIGA 176")
+                print("***************************")
                 try:
                     arduino.write(bytes("0", 'utf-8'))
+                    print("***************************")
+                    print("SCRITTURA SU SERIALE ESEGUITA 0 -- RIGA 181")
+                    print("***************************")
                 except:
                     print("\n errore trasmissione")
                 ##################################
 
+                print("***************************")
+                print("STOP AUDIO -- RIGA 188")
+                print("***************************")
                 stream.stop_stream()
                 stream.close()
                 # close PyAudio
@@ -167,15 +200,25 @@ class Server():
                 print("Stop playing " + str(playing))
 
                 ##################################
+                print("***************************")
+                print("AVVIO SCRITTURA SU SERIALE 0 -- RIGA 205")
+                print("***************************")
                 try:
                     arduino.write(bytes("0", 'utf-8'))
+                    print("***************************")
+                    print("SCRITTURA SU SERIALE ESEGUITA 0 -- RIGA 210")
+                    print("***************************")
                 except:
                     print("\n errore trasmissione")
                 ##################################
 
+                print("***************************")
+                print("STOP AUDIO GIA' ATTIVO -- RIGA 217")
+                print("***************************")
                 # stop stream
-                stream.stop_stream()
-                stream.close()
+                if stream.is_active():
+                    stream.stop_stream()
+                    stream.close()
                 
                 # close PyAudio
                 p.terminate()
@@ -207,6 +250,18 @@ if __name__ == "__main__":
     Server.ServerInfo()
 
     start_server = websockets.serve(Server.socket, HOST, PORT)
+
+    print("***************************")
+    print("INIZIO INIZIALIZZAZIONE 0 -- RIGA 239")
+    print("***************************")
+    try:
+        arduino.write(bytes("0", 'utf-8'))
+        print("***************************")
+        print("INIZIALIZZAZIONE ESEGUITA 0 -- RIGA 244")
+        print("***************************")
+    except:
+        print("\n errore trasmissione")
+
     asyncio.get_event_loop().set_default_executor(ThreadPoolExecutor())
     asyncio.get_event_loop().run_until_complete(start_server)
     asyncio.get_event_loop().run_forever()
