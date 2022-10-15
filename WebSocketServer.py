@@ -9,19 +9,19 @@ import logging
 try:
     import serial
 except:
-    print("errore importazione serial")
+    print("ERRORE IMPORT SERIAL")
 
 #################################################################
 print("***************************")
-print("CREAZIONE OGGETTO PORTA SERIALE -- RIGA 17")
+print("CREAZIONE OGGETTO PORTA SERIALE -- RIGA 16")
 print("***************************")
 try:
     arduino = serial.Serial(port='COM6', baudrate=9600, timeout=.1)
     print("***************************")
-    print("OGGETTO PORTA SERIALE CREATO -- RIGA 22")
+    print("OGGETTO PORTA SERIALE CREATO -- RIGA 21")
     print("***************************")
 except:
-    print("\n errore apertura porta seriale")
+    print("\nerrore apertura porta seriale")
 #################################################################
 
 logging.basicConfig(level=logging.DEBUG)
@@ -127,7 +127,7 @@ class Server():
                 print("SCRITTURA SU SERIALE ESEGUITA 1 -- RIGA 130")
                 print("***************************")
             except:
-                print("\n errore trasmissione")
+                print("\nerrore trasmissione")
             ##################################
 
             if(int(i) <= 60):
@@ -257,7 +257,7 @@ if __name__ == "__main__":
         print("INIZIALIZZAZIONE ESEGUITA 0 -- RIGA 244")
         print("***************************")
     except:
-        print("\n errore trasmissione")
+        print("\nerrore trasmissione")
 
     asyncio.get_event_loop().set_default_executor(ThreadPoolExecutor())
     asyncio.get_event_loop().run_until_complete(start_server)
